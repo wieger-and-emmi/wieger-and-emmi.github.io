@@ -1,5 +1,9 @@
 
 (function(){
+  /* always start at the top, instantly (no smooth slide when the letter appears) */
+  try{ if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
+  function toTop(){ var h=document.documentElement, b=h.style.scrollBehavior; h.style.scrollBehavior='auto'; window.scrollTo(0,0); h.style.scrollBehavior=b; }
+  toTop();
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $ = function(id){ return document.getElementById(id); };
   var intro = $('intro'), stage = $('stage'), invite = $('invite');
@@ -55,7 +59,7 @@
     function through(){
       var r = gzc.getBoundingClientRect();
       stage.style.setProperty('--z', 2.3 * Math.max(innerWidth / (r.width * .5), innerHeight / (r.height * .75)));
-      window.scrollTo(0,0); invite.removeAttribute('aria-hidden');
+      toTop(); invite.removeAttribute('aria-hidden');
       intro.classList.add('through');               // zoom in through the opening...
       intro.classList.add('leave'); welcome();      // ...while the invitation fades in at the same time
       setTimeout(function(){ intro.style.display = 'none'; document.body.classList.remove('locked'); startPetals(); }, reduce ? 0 : 2700);
